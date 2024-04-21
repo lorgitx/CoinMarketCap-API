@@ -5,14 +5,7 @@ const fastify = Fastify({
   logger: true // Enable logger
 });
 
-// Create a routes for homepage and about
-fastify.get('/', async function handler (request, reply) {
-  return { some_variable: 'some value of variable' }
-});
 
-fastify.get('/about', async function handler (request, reply) {
-  return { info: 'Super puper information is saved here' }
-});
 
 // Run web server
 try {
