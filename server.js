@@ -3,6 +3,7 @@ import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
 import Fastify from 'fastify'
 
+//Get the the root folder
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
@@ -11,6 +12,7 @@ const app = Fastify({
   logger: true // Enable logger
 });
 
+//Register new AutoLoadPlugin to load all the routes inside the folder structure
 app.register(fastifyAutoload, {
   dir: join(__dirname, 'routes')
 })

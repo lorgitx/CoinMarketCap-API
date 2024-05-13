@@ -1,45 +1,43 @@
-import axios from 'axios'
-
+//GET Route for individual coin route
 export default async function (fastify, opts) {
-  fastify.get('/', async function (request, reply) {
-    return 'This are the five coin by marketcap'
-  })
-  fastify.get('/:tokenId',  function (request, reply) {
-    const { tokenId } = request.params
+  fastify.get("/", async function (request, reply) {
+    return "This are the five coin by marketcap";
+  });
+  fastify.get("/:tokenId", function (request, reply) {
+    const { tokenId } = request.params;
 
-    const tokenIdPrice =  jupPriceApi(tokenId)
-console.log(22)
-    return tokenIdPrice
-  })
+    //Promise that return the coin price from JUP
+    return jupPriceApi(tokenId);
+  });
 }
 
+//Fetch the coin price with tokenId on Solana
+function jupPriceApi(tokenId) {
 
- function jupPriceApi(tokenId) {
+  const jupAPI = "https://price.jup.ag/v4/price?ids=" + tokenId;
 
-  const jupAPI = 'https://price.jup.ag/v4/price?ids=' + tokenId
+  // Fetch to  JUP API
+  var finalCoinPrice = fetch(jupAPI)
+    .then((response) => response.json())
 
-  // Realizar una solicitud GET utilizando Axios
-  var finalCoinPrice = axios.get(jupAPI)
-    .then(response => {
-      console.log(33)
-      const coin = response.data.data
+    .then((data) => {
+      const coin = data.data;
       var coinPrice;
 
       const keys = Object.keys(coin);
 
-      keys.forEach(key => {
-        coinPrice = coin[key].price
-      })
-      //console.log(coinPrice)
-      return coinPrice
+      keys.forEach((key) => {
+        coinPrice = coin[key].price;
+      });
+
+      return coinPrice;
     })
-    .catch(error => {
-      // Manejar errores de la solicitud
-      console.error('Error al realizar la solicitud:', error);
-      return error
+
+    .catch((err) => {
+      // Error handler
+      console.error("Error al realizar la solicitud:", error);
+      return err;
     });
 
-    console.log(44)
-
-  return finalCoinPrice
+  return finalCoinPrice;
 }
