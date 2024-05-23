@@ -1,6 +1,7 @@
 import fastifyAutoload from '@fastify/autoload';
 import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
+import mongo from '@fastify/mongodb'
 import Fastify from 'fastify'
 
 //Get the the root folder
@@ -15,6 +16,11 @@ const app = Fastify({
 //Register new AutoLoadPlugin to load all the routes inside the folder structure
 app.register(fastifyAutoload, {
   dir: join(__dirname, 'routes')
+})
+
+app.register(mongo,{
+  forceClose:true,
+  url:"mongodb://localhost:27017/coinmarketcap"
 })
 
 
