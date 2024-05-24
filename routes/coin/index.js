@@ -1,6 +1,6 @@
 //GET Route for individual coin route
 export default async function (fastify, opts) {
-  fastify.get("/", async function (request, reply) {
+  fastify.get("/price/", async function (request, reply) {
     //Array with the top 5 five coin solana by marketcap
     const topCoinsToQuery = [
       "So11111111111111111111111111111111111111112",
@@ -10,16 +10,27 @@ export default async function (fastify, opts) {
       "FU1q8vJpZNUrmqsciSjp8bAKKidGsLmouB8CBdf8TKQv",
     ];
 
-    return jupPriceApi(topCoinsToQuery,fastify);
+    return jupPriceApi(topCoinsToQuery,fastify)
   });
 
-  fastify.get("/:tokenId", function (request, reply) {
+  fastify.get("/price/:tokenId", function (request, reply) {
     const { tokenId } = request.params;
     const coinToQuery = [tokenId];
 
     //Promise that return the coin price from JUP
-    return jupPriceApi(coinToQuery, fastify);
+    return jupPriceApi(coinToQuery, fastify)
   });
+
+  // GET tokeninfo Collection
+  fastify.get("/data/", async function (request,reply){
+
+    const collection = fastify.mongo.db.collection("tokenInfo");
+    const tokensData = await collection.find().toArray();
+    
+    reply.send(tokensData)
+  })
+
+  //
 }
 
 //Fetch the coin price with tokenId on Solana
@@ -36,7 +47,7 @@ async function jupPriceApi(tokenId, fastify) {
     .then(async (responseJSON) => {
       const coin = responseJSON.data;
 
-      console.log(coin)
+      // console.log(coin)
 
       var coinPrice = [];
       const keys = Object.keys(coin);
@@ -67,3 +78,6 @@ async function jupPriceApi(tokenId, fastify) {
 
   return finalCoinPrice;
 }
+
+
+
