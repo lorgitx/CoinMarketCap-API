@@ -23,7 +23,6 @@ app.register(mongo,{
   url:"mongodb://localhost:27017/coinmarketcap"
 })
 
-
 // Run web server
 try {
   await app.listen({ port: 3000 })

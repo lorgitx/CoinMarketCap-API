@@ -10,7 +10,7 @@ export default async function (fastify, opts) {
       "FU1q8vJpZNUrmqsciSjp8bAKKidGsLmouB8CBdf8TKQv",
     ];
 
-    return jupPriceApi(topCoinsToQuery,fastify)
+    return jupPriceApi(topCoinsToQuery, fastify);
   });
 
   fastify.get("/price/:tokenId", function (request, reply) {
@@ -18,19 +18,33 @@ export default async function (fastify, opts) {
     const coinToQuery = [tokenId];
 
     //Promise that return the coin price from JUP
-    return jupPriceApi(coinToQuery, fastify)
+    return jupPriceApi(coinToQuery, fastify);
   });
 
-  // GET tokeninfo Collection
-  fastify.get("/data/", async function (request,reply){
-
+  // GET tokenInfo Collection
+  fastify.get("/data/list/", async function (request, reply) {
     const collection = fastify.mongo.db.collection("tokenInfo");
     const tokensData = await collection.find().toArray();
-    
-    reply.send(tokensData)
-  })
 
-  //
+    reply.send(tokensData);
+  });
+
+  // POST add a token inside tokenInfo Collection
+  fastify.post("/data/add/", async function (request, reply) {
+
+    //parse the json data inside the const
+    const { tokenPublicID, tokenName } = request.body;
+
+    //Validate that are not undefined
+    if (tokenPublicID && tokenName) {
+      const collection = fastify.mongo.db.collection("tokenInfo");
+      //Insert a document in the collection
+      const result = await collection.insertOne({ tokenPublicID, tokenName });
+      reply.send({ success: true, id: result.insertedId });
+    } else {
+      reply.send({ msg: "no token information sended" });
+    }
+  });
 }
 
 //Fetch the coin price with tokenId on Solana
@@ -78,6 +92,3 @@ async function jupPriceApi(tokenId, fastify) {
 
   return finalCoinPrice;
 }
-
-
-
