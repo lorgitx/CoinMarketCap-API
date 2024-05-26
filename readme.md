@@ -1,17 +1,20 @@
 # Project Name
-> A basic API to serve crypto prices.
+
+> App to check Solana Cryptocurrency Prices
 
 ## Table of Contents
-* [General Info](#general-information)
-* [Technologies Used](#technologies-used)
+
+- [General Info](#general-information)
+- [Technologies Used](#technologies-used)
 <!-- * [License](#license) -->
 
-
 ## General Information
-- This is an API to serve crypto princes in real time.
+
+- This is a web app created with the Fastify Web Framework to serve an API and a Client.
 <!-- You don't have to answer all the questions - just the ones relevant to your project. -->
 
-
 ## Technologies Used
-- Node 
+
+- Node
 - Fastify Framework
+- MongoDB
