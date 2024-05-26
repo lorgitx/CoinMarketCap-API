@@ -1,7 +1,6 @@
 import fastifyAutoload from '@fastify/autoload';
 import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
-import mongo from '@fastify/mongodb'
 import Fastify from 'fastify'
 
 //Get the the root folder
@@ -18,14 +17,13 @@ app.register(fastifyAutoload, {
   dir: join(__dirname, 'routes')
 })
 
-app.register(mongo,{
-  forceClose:true,
-  url:"mongodb://localhost:27017/coinmarketcap"
+app.register(fastifyAutoload,{
+  dir: join(__dirname,'plugins')
 })
 
 // Run web server
 try {
-  await app.listen({ port: 3000 })
+  await app.listen({ port: 4000 })
 } catch (err) {
   app.log.error(err)
   process.exit(1)

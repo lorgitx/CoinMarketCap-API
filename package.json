@@ -15,7 +15,8 @@
     "@fastify/mongodb": "^8.0.0",
     "@fastify/multipart": "^8.2.0",
     "axios": "^1.6.8",
-    "fastify": "^4.26.2"
+    "fastify": "^4.26.2",
+    "fastify-plugin": "^4.5.1"
   },
   "type": "module"
 }

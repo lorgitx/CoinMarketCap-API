@@ -86,7 +86,7 @@ async function jupPriceApi(tokenId, fastify) {
 
     .catch((err) => {
       // Error handler
-      console.error("Error al realizar la solicitud:", error);
+      console.error("Error al realizar la solicitud:", err);
       return err;
     });
 
