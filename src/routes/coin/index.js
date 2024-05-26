@@ -31,7 +31,6 @@ export default async function (fastify, opts) {
 
   // POST add a token inside tokenInfo Collection
   fastify.post("/data/add/", async function (request, reply) {
-
     //parse the json data inside the const
     const { tokenPublicID, tokenName } = request.body;
 

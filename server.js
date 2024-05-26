@@ -1,7 +1,8 @@
-import fastifyAutoload from "@fastify/autoload";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
+
 import Fastify from "fastify";
+import fastifyAutoload from "@fastify/autoload";
 
 //Get the the root folder
 const __filename = fileURLToPath(import.meta.url);
