@@ -1,23 +1,33 @@
-import Fastify from 'fastify'
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
+
+import Fastify from "fastify";
+import fastifyAutoload from "@fastify/autoload";
+
+//Get the the root folder
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // Inside of Fastify object you can write configuration for app
-const fastify = Fastify({
-  logger: true // Enable logger
+const app = Fastify({
+  logger: true, // Enable logger
 });
 
-// Create a routes for homepage and about
-fastify.get('/', async function handler (request, reply) {
-  return { some_variable: 'some value of variable' }
-});
-
-fastify.get('/about', async function handler (request, reply) {
-  return { info: 'Super puper information is saved here' }
+// Autoload pLugins and routes
+app.register(fastifyAutoload, {
+  dir: join(__dirname, "src"),
+  dirNameRoutePrefix: function rewrite(folderParent, folderName) {
+    if (folderName === "coin") {
+      return folderName;
+    }
+    return false;
+  },
 });
 
 // Run web server
 try {
-  await fastify.listen({ port: 3000 })
+  await app.listen({ port: 4000 });
 } catch (err) {
-  fastify.log.error(err)
-  process.exit(1)
+  app.log.error(err);
+  process.exit(1);
 }
