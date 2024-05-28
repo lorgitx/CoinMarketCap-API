@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", (event) => {
   GetPrices();
-  GetTokens();
+  GetStoredTokens();
   setInterval(GetPrices, 5000);
 });
 
@@ -22,7 +22,7 @@ async function GetPrices() {
     .insertAdjacentElement("afterbegin", ul);
 }
 
-async function GetTokens() {
+async function GetStoredTokens() {
   const request = await fetch("http://127.0.0.1:4000/coin/data/list/");
   const tokens = await JSON.parse(await request.text());
 
@@ -41,4 +41,20 @@ async function GetTokens() {
   document
     .querySelector(".stored-coins")
     .insertAdjacentElement("afterbegin", ul);
+}
+
+const formAddToken = document.querySelector("#add-token");
+formAddToken.addEventListener("submit", async function (event) {
+  event.preventDefault();
+  const { target } = event;
+  const payload = {
+    tokenName: target.tokenName.value,
+    tokenPublicID: target.tokenPublicID.value,
+  };
+  await SaveOneToken(payload);
+  target.reset();
+});
+
+async function SaveOneToken(tokenData) {
+  
 }
