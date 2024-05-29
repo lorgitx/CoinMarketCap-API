@@ -1,6 +1,6 @@
 const APPCONFIG = {
-  "API":"http://127.0.0.1:4000"
-}
+  API: "http://127.0.0.1:4000",
+};
 
 document.addEventListener("DOMContentLoaded", (event) => {
   GetPrices();
@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 });
 
 async function GetPrices() {
-  const request = await fetch(APPCONFIG.API+"/coin/price/");
+  const request = await fetch(APPCONFIG.API + "/coin/price/");
   const prices = await JSON.parse(await request.text());
 
   if (document.querySelector(".trending-coins ul"))
@@ -27,7 +27,7 @@ async function GetPrices() {
 }
 
 async function GetStoredTokens() {
-  const request = await fetch(APPCONFIG.API+"/coin/data/list/");
+  const request = await fetch(APPCONFIG.API + "/coin/data/list/");
   const tokens = await request.json();
 
   if (document.querySelector(".stored-coins ul"))
@@ -89,7 +89,7 @@ async function SaveOneToken(tokenData) {
     body: JSON.stringify(tokenData), //Convert the object to JSON to fastify validations
   };
 
-  const request = await fetch(APPCONFIG.API+"/coin/data/add/", opts);
+  const request = await fetch(APPCONFIG.API + "/coin/data/add/", opts);
   const token = await request.text();
 
   GetPrices();
@@ -105,13 +105,13 @@ async function DeleteOneTOken(tokenPublicID) {
     body: JSON.stringify(tokenPublicID), //Convert the object to JSON to fastify validations
   };
 
-  const request = await fetch(APPCONFIG.API+"/coin/data/delete/", opts);
+  const request = await fetch(APPCONFIG.API + "/coin/data/delete/", opts);
   const token = await request.text();
 
   GetStoredTokens();
 }
 
-//Place inline update form
+//Place an inline update form
 async function CreateInlineUpdateForm(tokenPublicID, target) {
   //Update form
   const inlineForm = document.createElement("form");
@@ -128,11 +128,21 @@ async function CreateInlineUpdateForm(tokenPublicID, target) {
   inputTokenPublicID.name = "tokenPublicID";
   inputTokenPublicID.value = target.dataset.tokenid;
 
+  const cancelUpdate = document.createElement("input");
+  cancelUpdate.type = "button"
+  cancelUpdate.value = "Cancel"
+
+  cancelUpdate.addEventListener("click",function(event){
+    event.preventDefault();
+    cancelUpdate.parentElement.remove();
+  })
+
   const updateSubmit = document.createElement("input");
   updateSubmit.type = "submit";
 
   inlineForm.appendChild(inputTokenName);
   inlineForm.appendChild(inputTokenPublicID);
+  inlineForm.appendChild(cancelUpdate);
   inlineForm.appendChild(updateSubmit);
 
   target.insertAdjacentElement("afterEnd", inlineForm);
@@ -155,7 +165,7 @@ async function UpdateOneToken(tokenData) {
     body: JSON.stringify(tokenData), //Convert the object to JSON to fastify validations
   };
 
-  const request = await fetch(APPCONFIG.API+"/coin/data/update/", opts);
+  const request = await fetch(APPCONFIG.API + "/coin/data/update/", opts);
   const token = await request.text();
 
   GetStoredTokens();
