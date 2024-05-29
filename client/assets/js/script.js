@@ -56,5 +56,14 @@ formAddToken.addEventListener("submit", async function (event) {
 });
 
 async function SaveOneToken(tokenData) {
-  
+  const opts = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" }, //This can be a header object or literal string object {''}
+    body: JSON.stringify(tokenData), //Convert the object to JSON to fastify validations
+  };
+
+  const request = await fetch("http://127.0.0.1:4000/coin/data/add/", opts);
+  const token = await request.text();
+
+  GetStoredTokens();
 }

@@ -31,9 +31,12 @@ export default async function (fastify, opts) {
 
   // POST add a token inside tokenInfo Collection
   fastify.post("/data/add/", async function (request, reply) {
-    //parse the json data inside the const
-    const { tokenPublicID, tokenName } = request.body;
+    
+    console.log(request.headers)
 
+    //parse the json data inside the const
+    const { tokenName, tokenPublicID } = request.body;
+    
     //Validate that are not undefined
     if (tokenPublicID && tokenName) {
       const collection = fastify.mongo.db.collection("tokenInfo");
