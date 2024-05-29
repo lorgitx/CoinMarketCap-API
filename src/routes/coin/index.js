@@ -26,13 +26,13 @@ export default async function (fastify, opts) {
     const collection = fastify.mongo.db.collection("tokenInfo");
     const tokensData = await collection.find().toArray();
 
-    reply.send(tokensData);
+    return tokensData;
   });
 
   // POST add a token inside tokenInfo Collection
   fastify.post("/data/add/", async function (request, reply) {
     //parse the json data inside the const
-    const { tokenPublicID, tokenName } = request.body;
+    const { tokenName, tokenPublicID } = request.body;
 
     //Validate that are not undefined
     if (tokenPublicID && tokenName) {
@@ -44,6 +44,20 @@ export default async function (fastify, opts) {
       reply.send({ msg: "no token information sended" });
     }
   });
+
+  //TODO:DELETE A STORED TOKEN
+  fastify.post("/data/delete/", async function(request,reply){
+    
+    const {tokenPublicID} = request.body;
+    if(tokenPublicID){
+      const collection = fastify.mongo.db.collection("tokenInfo");
+      const result  = await collection.deleteOne({"tokenPublicID":tokenPublicID});
+      reply.send({ success: true, id: result.deletedCount });
+    }else{
+      reply.send({ msg: "no token information sended" });
+    }
+  })
+  //TODO:UPDATE A STORED TOKEN
 }
 
 //Fetch the coin price with tokenId on Solana
