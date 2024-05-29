@@ -1,4 +1,4 @@
-form {
+form#add-token {
     background: #fbfbfb;
     padding: 10px 20px 10px 20px;
     max-width: 400px;
@@ -9,4 +9,10 @@ form input{
     margin-bottom: 10px;
     width: 100%;
     box-sizing: border-box;
+}
+
+form.inline-form {
+    display: flex;
+    background: #fbfbfb;
+    padding: 20px;
 }
