@@ -1,23 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Solana Coinmarketcap</title>
+    <link rel="stylesheet" href="assets/css/normalize.css">
     <link rel="stylesheet" href="assets/css/style.css">
-</head>
-<body>
-    <h1>Today's Solana Cryptocurrency Prices</h1>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 
-    <section class="trending-coins"></section>
-    <section class="stored-coins"></section>
-    <form id="add-token">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Today's Solana Cryptocurrency Prices</h1>
+
+        <section class="trending-coins"></section>
+        <section class="stored-coins"></section>
+
+    </div>
+    <form id="add-token" class="hidden">
+        <a href="#" class="cancel">X</a>
         <h3>Add token</h3>
-        <input type="text" name="tokenName" placeholder="Token name">
-        <input type="text" name="tokenPublicID" placeholder="Token ID">
-        <input type="submit" value="Add new token">
+        <input type="text" name="tokenName" placeholder="Token name" required>
+        <input type="text" name="tokenPublicID" placeholder="Token ID" required>
+        <input type="submit" value="Add token">
     </form>
-    
-    <footer><script src="./assets/js/script.js"></script></footer>
+
+    <footer>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+        <script src="./assets/js/script.js"></script>
+    </footer>
 </body>
+
 </html>

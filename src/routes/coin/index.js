@@ -46,18 +46,33 @@ export default async function (fastify, opts) {
   });
 
   //TODO:DELETE A STORED TOKEN
-  fastify.post("/data/delete/", async function(request,reply){
-    
-    const {tokenPublicID} = request.body;
-    if(tokenPublicID){
+  fastify.post("/data/delete/", async function (request, reply) {
+    const { tokenPublicID } = request.body;
+    if (tokenPublicID) {
       const collection = fastify.mongo.db.collection("tokenInfo");
-      const result  = await collection.deleteOne({"tokenPublicID":tokenPublicID});
+      const result = await collection.deleteOne({
+        tokenPublicID: tokenPublicID,
+      });
       reply.send({ success: true, id: result.deletedCount });
-    }else{
+    } else {
       reply.send({ msg: "no token information sended" });
     }
-  })
+  });
   //TODO:UPDATE A STORED TOKEN
+  fastify.put("/data/update/", async function (request, reply) {
+    const { tokenID,tokenName, tokenPublicID } = request.body;
+    if (tokenName && tokenPublicID && tokenID) {
+      console.log(request.body)
+      const collection = fastify.mongo.db.collection("tokenInfo");
+      const result = await collection.updateOne(
+        { "_id": new fastify.mongo.ObjectId(tokenID) },
+        { $set: { tokenPublicID: tokenPublicID,tokenName: tokenName  } }
+      );
+      reply.send({ success: true, id: result });
+    } else {
+      reply.send({ msg: "no token information sended" });
+    }
+  });
 }
 
 //Fetch the coin price with tokenId on Solana
