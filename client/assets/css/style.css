@@ -1,10 +1,35 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+.container {
+    background-color: #fbfbfb;
+    padding: 5px 20px 20px;
+}
+
+.hidden {
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+    transition: opacity 0.2s ease, height 0.2s ease;
+}
+
+.visible {
+    opacity: 1;
+    height: auto;
+    transition: opacity 0.2s ease, height 0.2s ease;
+
+}
+
 form#add-token {
     background: #fbfbfb;
     padding: 10px 20px 10px 20px;
     max-width: 400px;
+    margin-top: 20px;
+    position: relative;
 }
 
-form input{
+form input {
     display: block;
     margin-bottom: 10px;
     width: 100%;
@@ -13,6 +38,59 @@ form input{
 
 form.inline-form {
     display: flex;
-    background: #fbfbfb;
+    background: #e2f3ff;
     padding: 20px;
+    opacity: 1;
+    animation: appear 0.15s;
+}
+
+form.inline-form input {
+    margin-bottom: 0;
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+    }
+}
+
+.stored-coins>a {
+    background: #2196F3;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.stored-coins ul {
+    border-bottom: 1px solid #e7e3e3;
+    padding-bottom: 20px;
+}
+
+.stored-coins ul li {
+    margin-bottom: 5px;
+}
+
+
+a.cancel {
+    float: right;
+    background-color: red;
+    color: white;
+    text-decoration: none;
+    width: 21px;
+    text-align: center;
+    height: 21px;
+    font-size: 15px;
+    line-height: 22px;
+    border-radius: 44px;
+    position: absolute;
+    top: -11px;
+    right: -11px;
+}
+
+ul {
+    list-style: none;
+    padding-left: 0;
 }

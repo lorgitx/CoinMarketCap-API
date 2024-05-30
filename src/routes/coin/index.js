@@ -60,14 +60,15 @@ export default async function (fastify, opts) {
   });
   //TODO:UPDATE A STORED TOKEN
   fastify.put("/data/update/", async function (request, reply) {
-    const { tokenName, tokenPublicID } = request.body;
-    if (tokenName && tokenPublicID) {
+    const { tokenID,tokenName, tokenPublicID } = request.body;
+    if (tokenName && tokenPublicID && tokenID) {
+      console.log(request.body)
       const collection = fastify.mongo.db.collection("tokenInfo");
       const result = await collection.updateOne(
-        { tokenPublicID: tokenPublicID },
-        { $set: { tokenName: tokenName, tokenPublicID: tokenPublicID } }
+        { "_id": new fastify.mongo.ObjectId(tokenID) },
+        { $set: { tokenPublicID: tokenPublicID,tokenName: tokenName  } }
       );
-      reply.send({ success: true, id: result.modifiedCount });
+      reply.send({ success: true, id: result });
     } else {
       reply.send({ msg: "no token information sended" });
     }
