@@ -23,10 +23,9 @@ body {
 
 form#add-token {
     background: #fbfbfb;
-    padding: 10px 20px 10px 20px;
-    max-width: 400px;
     margin-top: 20px;
     position: relative;
+    display: flex;
 }
 
 form input {
@@ -65,8 +64,9 @@ form.inline-form input {
 }
 
 .stored-coins ul {
+    border-top: 1px solid #e7e3e3;
     border-bottom: 1px solid #e7e3e3;
-    padding-bottom: 20px;
+    padding: 15px 0;
 }
 
 .stored-coins ul li {
@@ -93,4 +93,11 @@ a.cancel {
 ul {
     list-style: none;
     padding-left: 0;
+}
+
+.dpnone{
+    display: none !important;
+}
+.dpblock{
+    display: block !important;
 }
