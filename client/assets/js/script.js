@@ -11,11 +11,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
 //Get prices list
 async function GetPrices() {
-  const request = await fetch(APPCONFIG.API + "/coin/price/");
-  const prices = await JSON.parse(await request.text());
+  const prices = await FetchData(APPCONFIG.API + "/coin/price/");
+  if (!prices) return;
 
-  if (document.querySelector(".trending-coins ul"))
-    document.querySelector(".trending-coins ul").remove();
+  document.querySelector(".trending-coins").innerHTML = "";
 
   const ul = document.createElement("ul");
 
@@ -31,8 +30,9 @@ async function GetPrices() {
 //Load Stored Token Components
 async function GetStoredTokens() {
   const tokens = await ListStoredTokens();
+  if (!tokens) return;
 
-  const divStoredToken = document.querySelector(".stored-coins");
+  let divStoredToken = document.querySelector(".stored-coins");
 
   const formAddToken = document.createElement("form");
   const ul = document.createElement("ul");
@@ -66,7 +66,11 @@ async function GetStoredTokens() {
         deleteLink.addEventListener("click", async function (event) {
           event.preventDefault();
 
-          await DeleteOneTOken({ tokenPublicID: event.target.dataset.tokenid });
+          const result = await DeleteOneToken({
+            tokenPublicID: event.target.dataset.tokenid,
+          });
+          if (!result) return;
+
           divStoredToken.innerHTML = "";
           divStoredToken = null;
         });
@@ -139,7 +143,10 @@ async function GetStoredTokens() {
               tokenPublicID: inputTokenPublicID.value,
               tokenID: target.dataset.tokenid,
             };
-            await UpdateOneToken(payload);
+
+            const result = await UpdateOneToken(payload);
+            if (!result) return;
+
             divStoredToken.innerHTML = "";
             divStoredToken = null;
           });
@@ -205,7 +212,10 @@ async function GetStoredTokens() {
       tokenName: target.tokenName.value,
       tokenPublicID: target.tokenPublicID.value,
     };
-    await SaveOneToken(payload);
+
+    const result = await SaveOneToken(payload);
+    if (!result) return;
+
     divStoredToken.innerHTML = "";
     divStoredToken = null;
   });
@@ -232,8 +242,12 @@ async function GetStoredTokens() {
 
 //CRUD Stored tokens
 async function ListStoredTokens() {
-  const request = await fetch(APPCONFIG.API + "/coin/data/list/");
-  return (tokens = await request.json());
+  const tokens = await FetchData(APPCONFIG.API + "/coin/data/list/");
+  if (!tokens) {
+    return;
+  } else {
+    return tokens;
+  }
 }
 async function SaveOneToken(tokenData) {
   const opts = {
@@ -242,26 +256,32 @@ async function SaveOneToken(tokenData) {
     body: JSON.stringify(tokenData), //Convert the object to JSON to fastify validations
   };
 
-  const request = await fetch(APPCONFIG.API + "/coin/data/add/", opts);
-  const token = await request.text();
+  const result = await FetchData(APPCONFIG.API + "/coin/data/add/", opts);
+  if (!result) {
+    return;
+  }
 
   NotificationMSG("Token Saved");
-
   GetPrices();
   GetStoredTokens();
+
+  return result;
 }
-async function DeleteOneTOken(tokenPublicID) {
+async function DeleteOneToken(tokenPublicID) {
   const opts = {
     method: "POST",
     headers: { "Content-Type": "application/json" }, //This can be a header object or literal string object {''}
     body: JSON.stringify(tokenPublicID), //Convert the object to JSON to fastify validations
   };
 
-  const request = await fetch(APPCONFIG.API + "/coin/data/delete/", opts);
-  const token = await request.text();
+  const result = await FetchData(APPCONFIG.API + "/coin/data/delete/", opts);
+  if (!result) {
+    return;
+  }
 
   NotificationMSG("Token Deleted");
   GetStoredTokens();
+  return result;
 }
 async function UpdateOneToken(tokenData) {
   const opts = {
@@ -270,16 +290,34 @@ async function UpdateOneToken(tokenData) {
     body: JSON.stringify(tokenData), //Convert the object to JSON to fastify validations
   };
 
-  const request = await fetch(APPCONFIG.API + "/coin/data/update/", opts);
-  const token = await request.text();
+  const result = await FetchData(APPCONFIG.API + "/coin/data/update/", opts);
+  if (!result) {
+    return;
+  }
 
   NotificationMSG("Token Updated");
-
   GetStoredTokens();
   GetPrices();
+  return result;
 }
 
 //Utils
+
+//Handle fetchs
+async function FetchData(url, opts) {
+  try {
+    const response = await fetch(url, opts);
+    if (!response.ok) {
+      throw new Error(`HTTP Status: ${response.status}`);
+    }
+    return await response.json();
+  } catch (error) {
+    NotificationMSG(error);
+    return null;
+  }
+}
+
+//Create a notification
 function NotificationMSG(msg) {
   Toastify({
     text: msg,
