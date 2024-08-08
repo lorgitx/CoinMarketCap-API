@@ -101,3 +101,19 @@ ul {
 .dpblock{
     display: block !important;
 }
+
+/* Internet Status */
+.connection-status {
+    text-align: center;
+    padding: 20px 10px;
+    
+}
+
+
+.connection-status.online{
+    background: green;
+}
+
+.connection-status.offline{
+    background: orange;
+}
