@@ -2,12 +2,54 @@ const APPCONFIG = {
   API: "http://127.0.0.1:4000",
 };
 
+let getPricesInvterval, getStoredTokensInterval;
+
 //Execute when the DOM is loaded
 document.addEventListener("DOMContentLoaded", (event) => {
+  
+  //Detect the network status
+  window.addEventListener("online", updateOnlineStatus);
+  window.addEventListener("offline", updateOnlineStatus);
+
+  //Init App
+  updateOnlineStatus();
+});
+
+//Update Online Status
+function updateOnlineStatus() {
+  if (navigator.onLine) {
+    document.querySelector(".connection-status span").innerHTML = "We are online";
+    document.querySelector(".connection-status").classList.add("dpnone");
+    document.querySelector(".connection-status").classList.remove("offline");
+
+    startFetchingData();
+  } else {
+    document.querySelector(".connection-status span").innerHTML = "No internet connection";
+    document.querySelector(".connection-status").classList.remove("dpnone");
+    document.querySelector(".connection-status").classList.add("offline");
+
+    stopFetchingData();
+  }
+}
+
+//Start Fetching Prices
+function startFetchingData() {
+  
+  NotificationMSG("Actualizando Datos");
+  
   GetPrices();
   GetStoredTokens();
-  setInterval(GetPrices, 20000);
-});
+
+  getPricesInvterval = setInterval(GetPrices, 5000);
+  getStoredTokensInterval = setInterval(GetStoredTokens, 5000);
+}
+
+//Stop Fetching Prices
+function stopFetchingData() {
+  NotificationMSG("Stop Fetch & Cleaning Intervals");
+  clearInterval(getPricesInvterval);
+  clearInterval(getStoredTokensInterval);
+}
 
 //Get prices list
 async function GetPrices() {
@@ -29,8 +71,11 @@ async function GetPrices() {
 
 //Load Stored Token Components
 async function GetStoredTokens() {
+  //Query the tokens stored in the dabatase
   const tokens = await ListStoredTokens();
   if (!tokens) return;
+
+  document.querySelector(".stored-coins").innerHTML = "";
 
   let divStoredToken = document.querySelector(".stored-coins");
 
@@ -301,8 +346,7 @@ async function UpdateOneToken(tokenData) {
   return result;
 }
 
-//Utils
-
+//UTILS
 //Handle fetchs
 async function FetchData(url, opts) {
   try {
