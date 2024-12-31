@@ -1,6 +1,6 @@
 ## Todo
 
-- [ ] Fix the calls to the JUP API  
+- [x] Fix the calls to the JUP API  
 - [ ] Recreate the MongoDB Database
 
 ## In Progress
