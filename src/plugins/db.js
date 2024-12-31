@@ -5,7 +5,7 @@ import mongo from "@fastify/mongodb";
 async function dbConnector(fastify, opts) {
   fastify.register(mongo, {
     forceClose: true,
-    url: "mongodb://localhost:27017/coinmarketcap",
+    url: process.env.MONGO_URI,
   });
 }
 
