@@ -11,7 +11,7 @@ export default async function (fastify, opts) {
     ];
 
     // return jupPriceApi(topCoinsToQuery, fastify);
-    return topCoinsToQuery;
+    return topCoinsToQuery; 
   });
 
 //   fastify.get("/price/:tokenId", function (request, reply) {
