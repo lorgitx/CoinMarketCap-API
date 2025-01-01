@@ -8,6 +8,11 @@ export default async function (fastify, opts) {
       "5mbK36SZ7J19An8jFochhQS4of8g6BwUjbeCSxBSoWdp",
       "7BgBvyjrZX1YKz4oh9mjb8ZScatkkwb8DzFx7LoiVkM3",
       "FU1q8vJpZNUrmqsciSjp8bAKKidGsLmouB8CBdf8TKQv",
+      "StepAscQoEioFxxWGnh2sLBDFp9d8rvKz2Yp39iDpyT",
+      "3S8qX1MsMqRbiwKg2cQyx7nis1oHMgaCuc9c4VfvVdPN",
+      "madHpjRn6bd8t78Rsy7NuSuNwWa2HU8ByPobZprHbHv",
+      "5SVG3T9CNQsm2kEwzbRq6hASqh1oGfjqTtLXYUibpump",
+      "4Cnk9EPnW5ixfLZatCPJjDB1PUtcRpVVgTQukm9epump"
     ];
 
     return jupPriceApi(topCoinsToQuery, fastify);
