@@ -4,7 +4,7 @@
   "description": "Coinmarketcap on Solana",
   "main": "server.js",
   "scripts": {
-    "build": "node server.js",
+    "build": "node --env-file=.env.local  server.js ",
     "start": "node server.js"
   },
   "author": "",
