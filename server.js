@@ -45,13 +45,6 @@ app.register(fastifyAutoload, {
   },
 });
 
-// Middleware para remover el prefijo '/api'
-app.addHook('onRequest', (request, reply, done) => {
-  if (request.raw.url.startsWith('/api/')) {
-    request.raw.url = request.raw.url.replace('/api', '');
-  }
-  done();
-})
 
 export default async (req, res) => {
   // Run web server
