@@ -45,6 +45,14 @@ app.register(fastifyAutoload, {
   },
 });
 
+app.addHook('preParsing', (request, reply, payload, done) => {
+  // Si la URL empieza con "/api", la modificamos quitándole ese prefijo
+  if (request.raw.url.startsWith('/api')) {
+    request.raw.url = request.raw.url.slice(4); // quita los primeros 4 caracteres: "/api"
+  }
+  done(null, payload);
+});
+
 
 export default async (req, res) => {
   // Run web server
