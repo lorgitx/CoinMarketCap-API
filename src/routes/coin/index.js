@@ -15,7 +15,7 @@ export default async function (fastify, opts) {
       "4Cnk9EPnW5ixfLZatCPJjDB1PUtcRpVVgTQukm9epump"
     ];
 
-    return jupPriceApi(topCoinsToQuery, fastify);
+    return coinDataByContract(topCoinsToQuery, fastify);
 
   });
 
@@ -24,7 +24,7 @@ export default async function (fastify, opts) {
     const coinToQuery = [tokenId];
 
     //Promise that return the coin price from JUP
-    return jupPriceApi(coinToQuery, fastify);
+    return coinDataByContract(coinToQuery, fastify);
   });
 
   // GET tokenInfo Collection
@@ -81,44 +81,46 @@ export default async function (fastify, opts) {
   });
 }
 
-//Fetch the coin price with tokenId on Solana
-async function jupPriceApi(tokenId, fastify) {
+//Fetch the coin by contract from CoinGecko
+async function coinDataByContract(contractToken, fastify) {
 
-  let jupAPIbase = "https://api.jup.ag/price/v2?ids=";
-  let jupAPI = jupAPIbase + tokenId.join(",");
+  let dataByContract = "https://api.coingecko.com/api/v3/simple/token_price/solana?vs_currencies=usd&include_market_cap=true&include_24hr_vol=true&include_24hr_change=true&contract_addresses=";
+  let dataByContractQuery = dataByContract + contractToken.join(",");
 
-  // Fetch to  JUP API
-  let finalCoinPrice = fetch(jupAPI)
-    .then((response) => response.json())
+  const options = {
+    method: 'GET',
+    headers: { accept: 'application/json', 'x-cg-demo-api-key': process.env.COINGECKO_KEY }
+  };
 
-    .then(async (responseJSON) => {
-      const coin = responseJSON.data;
-
-      let coinPrice = [];
-      const keys = Object.keys(coin);
+  //Fetch to CoinGecko
+  return fetch(dataByContractQuery, options).then(res => res.json())
+    .then(json => {
 
       const collection = fastify.mongo.db.collection("tokenInfo");
+      const promises = [];
 
-      for (const key of keys) {
-        const resultado = await collection
-          .find({ tokenPublicID: coin[key].id })
-          .toArray();
-        // Verificar si resultado[0] y resultado[0].tokenName están definidos
-        if (resultado[0] && resultado[0].tokenName) {
-          coinPrice.push(resultado[0].tokenName + ":" + coin[key].price);
-        } else {
-          // Manejar el caso en que tokenName es indefinido
-          coinPrice.push(coin[key].mintSymbol + ":" + coin[key].price);
+      for (const key in json) {
+        if (json.hasOwnProperty(key)) {
+
+          const queryPromise = collection.find({ tokenPublicID: key }).toArray().
+            then(result => {
+
+              json[key].name = result[0].tokenName;
+            });
+
+          promises.push(queryPromise);
         }
       }
-      return coinPrice;
+      return Promise.all(promises)
+        .then(() => {
+
+          const entries = Object.entries(json);
+          entries.sort((a, b) => b[1].usd_market_cap - a[1].usd_market_cap);
+          const sortJSON = Object.fromEntries(entries);
+          return sortJSON;
+
+        })
+        .then((sortJSON) => sortJSON);
     })
-
-    .catch((err) => {
-      // Error handler
-      console.error("Error al realizar la solicitud:", err);
-      return err;
-    });
-
-  return finalCoinPrice;
+    .catch(err => console.error(err));
 }
