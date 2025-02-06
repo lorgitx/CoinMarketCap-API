@@ -1,6 +1,6 @@
 # Project Name
 
-> App to check Solana Cryptocurrency Prices
+> App to check Top Solana Cryptocurrency By MarketCap
 
 ## Table of Contents
 
@@ -10,8 +10,7 @@
 
 ## General Information
 
-- This is a web app created with the Fastify Web Framework to serve an API and a Client.
-<!-- You don't have to answer all the questions - just the ones relevant to your project. -->
+- This is a web app created with the Fastify Web Framework to serve an API
 
 ## Technologies Used
 

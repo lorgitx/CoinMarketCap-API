@@ -1,7 +1,7 @@
 //GET Route for individual coin route
 export default async function (fastify, opts) {
   fastify.get("/price/", async function (request, reply) {
-    //Array with the top 5 five coin solana by marketcap
+    //Array with the top 10 coins Solana by MarketCap
     const topCoinsToQuery = [
       "So11111111111111111111111111111111111111112",
       "6D7NaB2xsLd7cauWu1wKk6KBsJohJmP2qZH9GEfVi5Ui",
@@ -19,16 +19,17 @@ export default async function (fastify, opts) {
 
   });
 
+  // Get token by Contract
   fastify.get("/price/:tokenId", function (request, reply) {
     const { tokenId } = request.params;
     const coinToQuery = [tokenId];
 
-    //Promise that return the coin price from JUP
+    //Promise that return the coin info from CoinGecko
     return coinDataByContract(coinToQuery, fastify);
   });
 }
 
-//Fetch the coin by contract from CoinGecko
+//Fetch the coins iformation by contract from CoinGecko
 async function coinDataByContract(contractToken, fastify) {
 
   let dataByContract = "https://api.coingecko.com/api/v3/simple/token_price/solana?vs_currencies=usd&include_market_cap=true&include_24hr_vol=true&include_24hr_change=true&contract_addresses=";

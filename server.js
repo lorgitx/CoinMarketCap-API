@@ -3,6 +3,7 @@ import { config } from 'dotenv';
 const isProduction = process.env.VERCEL_ENV === 'production';
 const isPreview = process.env.VERCEL_ENV === 'preview';
 
+// Only import the .env.dev if the Environment is Local
 if (!isProduction && !isPreview) {
   console.log('Loading custom .env');
   config({ path: '.env.dev' });
@@ -25,7 +26,7 @@ const __dirname = dirname(__filename);
 
 // Inside of Fastify object you can write configuration for app
 const app = Fastify({
-  logger: true, // Enable logger
+  logger: false, // Enable logger
 });
 
 // // Registrar el plugin CORS
@@ -46,7 +47,7 @@ app.register(fastifyAutoload, {
 });
 
 export default async (req, res) => {
-  // Run web server
+  // Run the API as Serverless
   try {
     await app.ready();
     app.server.emit('request', req, res);
