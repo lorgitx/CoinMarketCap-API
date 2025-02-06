@@ -26,59 +26,6 @@ export default async function (fastify, opts) {
     //Promise that return the coin price from JUP
     return coinDataByContract(coinToQuery, fastify);
   });
-
-  // GET tokenInfo Collection
-  fastify.get("/data/list/", async function (request, reply) {
-    const collection = fastify.mongo.db.collection("tokenInfo");
-    const tokensData = await collection.find().toArray();
-
-    return tokensData;
-  });
-
-  // POST add a token inside tokenInfo Collection
-  fastify.post("/data/add/", async function (request, reply) {
-    //parse the json data inside the const
-    const { tokenName, tokenPublicID } = request.body;
-
-    //Validate that are not undefined
-    if (tokenPublicID && tokenName) {
-      const collection = fastify.mongo.db.collection("tokenInfo");
-      //Insert a document in the collection
-      const result = await collection.insertOne({ tokenPublicID, tokenName });
-      reply.send({ success: true, id: result.insertedId });
-    } else {
-      reply.send({ msg: "no token information sended" });
-    }
-  });
-
-  //TODO:DELETE A STORED TOKEN
-  fastify.post("/data/delete/", async function (request, reply) {
-    const { tokenPublicID } = request.body;
-    if (tokenPublicID) {
-      const collection = fastify.mongo.db.collection("tokenInfo");
-      const result = await collection.deleteOne({
-        tokenPublicID: tokenPublicID,
-      });
-      reply.send({ success: true, id: result.deletedCount });
-    } else {
-      reply.send({ msg: "no token information sended" });
-    }
-  });
-  //TODO:UPDATE A STORED TOKEN
-  fastify.put("/data/update/", async function (request, reply) {
-    const { tokenID, tokenName, tokenPublicID } = request.body;
-    if (tokenName && tokenPublicID && tokenID) {
-      console.log(request.body)
-      const collection = fastify.mongo.db.collection("tokenInfo");
-      const result = await collection.updateOne(
-        { "_id": new fastify.mongo.ObjectId(tokenID) },
-        { $set: { tokenPublicID: tokenPublicID, tokenName: tokenName } }
-      );
-      reply.send({ success: true, id: result });
-    } else {
-      reply.send({ msg: "no token information sended" });
-    }
-  });
 }
 
 //Fetch the coin by contract from CoinGecko
